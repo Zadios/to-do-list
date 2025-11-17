@@ -1,5 +1,6 @@
 package com.viscovich.to_do_list.service;
 
+import com.viscovich.to_do_list.exception.TaskNotFoundException;
 import com.viscovich.to_do_list.model.Task;
 import com.viscovich.to_do_list.repository.TaskRepository;
 import org.springframework.stereotype.Service;
@@ -37,7 +38,7 @@ public class TaskService {
             task.setCompleted(updatedTask.isCompleted());
             return taskRepository.save(task);
         } else {
-            return null; // Add exception
+            throw new TaskNotFoundException(id);
         }
     }
 
