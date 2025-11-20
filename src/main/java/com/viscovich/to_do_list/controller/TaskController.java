@@ -3,6 +3,7 @@ package com.viscovich.to_do_list.controller;
 import com.viscovich.to_do_list.exception.TaskNotFoundException;
 import com.viscovich.to_do_list.model.Task;
 import com.viscovich.to_do_list.service.TaskService;
+import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 import java.util.Optional;
 
@@ -24,7 +25,7 @@ public class TaskController {
     }
 
     @PostMapping
-    public Task createTask(@RequestBody Task task) {
+    public Task createTask(@Valid @RequestBody Task task) {
         return taskService.createTask(task);
     }
 
@@ -40,7 +41,7 @@ public class TaskController {
     }
 
     @PutMapping("/{id}")
-    public Task updateTask(@PathVariable Long id, @RequestBody Task updatedTask) {
+    public Task updateTask(@PathVariable Long id, @Valid @RequestBody Task updatedTask) {
         return taskService.updateTask(id, updatedTask);
     }
 }
