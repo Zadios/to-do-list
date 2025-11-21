@@ -18,7 +18,7 @@ public class Task {
     @Size(max = 100, message = "El título no puede tener más de 100 caracteres")
     private String title;
 
-    @Size(max = 255, message = "La descripción no puede tener más de 255 caracteres")
+    @Size(min = 5, max = 255, message = "La descripción debe tener entre 5 y 255 caracteres")
     private String description;
 
     private boolean completed;

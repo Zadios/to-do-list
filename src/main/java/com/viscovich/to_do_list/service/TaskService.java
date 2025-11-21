@@ -1,5 +1,6 @@
 package com.viscovich.to_do_list.service;
 
+import com.viscovich.to_do_list.exception.TaskAlreadyCompletedException;
 import com.viscovich.to_do_list.exception.TaskNotFoundException;
 import com.viscovich.to_do_list.model.Task;
 import com.viscovich.to_do_list.repository.TaskRepository;
@@ -33,10 +34,14 @@ public class TaskService {
         Optional<Task> existingTask = taskRepository.findById(id);
         if (existingTask.isPresent()){
             Task task = existingTask.get();
-            task.setTitle(updatedTask.getTitle());
-            task.setDescription(updatedTask.getDescription());
-            task.setCompleted(updatedTask.isCompleted());
-            return taskRepository.save(task);
+            if (task.isCompleted()) {
+                throw new TaskAlreadyCompletedException(task.getTitle());
+            } else {
+                task.setTitle(updatedTask.getTitle());
+                task.setDescription(updatedTask.getDescription());
+                task.setCompleted(updatedTask.isCompleted());
+                return taskRepository.save(task);
+            }
         } else {
             throw new TaskNotFoundException(id);
         }

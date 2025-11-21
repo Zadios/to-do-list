@@ -12,10 +12,15 @@ import java.util.Map;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
-    
+
     @ExceptionHandler(TaskNotFoundException.class)
     public ResponseEntity<String> handleTaskNotFound(TaskNotFoundException ex) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+    }
+
+    @ExceptionHandler (TaskAlreadyCompletedException.class)
+    public ResponseEntity<String> handleTaskAlreadyCompletedException(TaskAlreadyCompletedException ex) {
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(ex.getMessage());
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
