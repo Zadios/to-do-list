@@ -1,9 +1,6 @@
 package com.viscovich.to_do_list.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
@@ -16,6 +13,7 @@ public class Task {
 
     @NotBlank(message = "El título no puede estar vacío")
     @Size(max = 100, message = "El título no puede tener más de 100 caracteres")
+    @Column(unique=true)
     private String title;
 
     @Size(min = 5, max = 255, message = "La descripción debe tener entre 5 y 255 caracteres")
