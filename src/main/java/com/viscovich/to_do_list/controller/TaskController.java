@@ -4,6 +4,7 @@ import com.viscovich.to_do_list.exception.TaskNotFoundException;
 import com.viscovich.to_do_list.model.Task;
 import com.viscovich.to_do_list.service.TaskService;
 import jakarta.validation.Valid;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.Optional;
 
@@ -43,5 +44,11 @@ public class TaskController {
     @PutMapping("/{id}")
     public Task updateTask(@PathVariable Long id, @Valid @RequestBody Task updatedTask) {
         return taskService.updateTask(id, updatedTask);
+    }
+
+    @PatchMapping("/{id}/complete")
+    public ResponseEntity<String> completeTask(@PathVariable Long id){
+        Task task = taskService.completeTask(id);
+        return ResponseEntity.ok("La tarea fue marcada como completada");
     }
 }

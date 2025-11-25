@@ -1,6 +1,7 @@
 package com.viscovich.to_do_list.service;
 
 import com.viscovich.to_do_list.exception.TaskAlreadyCompletedException;
+import com.viscovich.to_do_list.exception.TaskIncompleteDataException;
 import com.viscovich.to_do_list.exception.TaskNotFoundException;
 import com.viscovich.to_do_list.model.Task;
 import com.viscovich.to_do_list.repository.TaskRepository;
@@ -46,6 +47,23 @@ public class TaskService {
             throw new TaskNotFoundException(id);
         }
     }
+
+    public Task completeTask(Long id) {
+        Task task = taskRepository.findById(id)
+                .orElseThrow(() -> new TaskNotFoundException(id));
+
+        if (task.isCompleted()) {
+            throw new TaskAlreadyCompletedException(task.getTitle());
+        }
+
+        if (task.getDescription() == null || task.getDescription().isBlank()) {
+            throw new TaskIncompleteDataException(task.getTitle());
+        }
+
+        task.setCompleted(true);
+        return taskRepository.save(task);
+    }
+
 
     public void deleteTask(Long id) {
         taskRepository.deleteById(id);
