@@ -1,8 +1,17 @@
 package com.viscovich.to_do_list.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.viscovich.to_do_list.repository.TaskRepository;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.FutureOrPresent;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
 public class Task {
@@ -16,10 +25,32 @@ public class Task {
     @Column(unique=true)
     private String title;
 
+    @NotBlank(message = "La descripción no puede estar vacía")
     @Size(min = 5, max = 255, message = "La descripción debe tener entre 5 y 255 caracteres")
     private String description;
 
     private boolean completed;
+
+    @JsonFormat(pattern = "dd/MM/yyyy HH:mm")
+    @CreationTimestamp
+    @Column(updatable = false)
+    private LocalDateTime createdAt;
+
+    @JsonFormat(pattern = "dd/MM/yyyy HH:mm")
+    @UpdateTimestamp
+    private LocalDateTime updatedAt;
+
+    @FutureOrPresent(message = "La fecha límite debe ser hoy o una fecha futura")
+    @JsonFormat(pattern = "dd/MM/yyyy")
+    private LocalDate deadline;
+
+//    private enum Priority {
+//        LOW,
+//        MEDIUM,
+//        HIGH
+//    }
+//
+//    private Priority priority;
 
     public Task(){
     }
@@ -61,6 +92,14 @@ public class Task {
         this.completed = completed;
     }
 
+    public void setDeadline(LocalDate deadline) {
+        this.deadline = deadline;
+    }
+
+    public LocalDate getDeadline() {
+        return deadline;
+    }
+
 
     @Override
     public String toString() {
@@ -68,6 +107,8 @@ public class Task {
                 "id=" + id +
                 ", title='" + title + '\'' +
                 ", description='" + description + '\'' +
+                ", createdAt=" + createdAt +
+                ", updatedAt=" + updatedAt +
                 '}';
     }
 

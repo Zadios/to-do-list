@@ -1,11 +1,14 @@
 package com.viscovich.to_do_list.controller;
 
+import com.viscovich.to_do_list.dto.DeadlineRequest;
 import com.viscovich.to_do_list.exception.TaskNotFoundException;
 import com.viscovich.to_do_list.model.Task;
 import com.viscovich.to_do_list.service.TaskService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.time.LocalDate;
 import java.util.Optional;
 
 import java.util.List;
@@ -51,4 +54,11 @@ public class TaskController {
         Task task = taskService.completeTask(id);
         return ResponseEntity.ok("La tarea fue marcada como completada");
     }
+
+    @PatchMapping("/{id}/deadline")
+    public ResponseEntity<String> updateDeadline(@PathVariable Long id, @RequestBody DeadlineRequest request){
+        Task updated = taskService.updateDeadline(id, request.deadline);
+        return ResponseEntity.ok("La fecha límite para la tarea '" + updated.getTitle() + "' fue actualizada correctamente.");
+    }
+
 }

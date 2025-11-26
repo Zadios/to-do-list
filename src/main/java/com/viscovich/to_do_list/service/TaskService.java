@@ -1,5 +1,6 @@
 package com.viscovich.to_do_list.service;
 
+import com.viscovich.to_do_list.exception.InvalidDeadlineException;
 import com.viscovich.to_do_list.exception.TaskAlreadyCompletedException;
 import com.viscovich.to_do_list.exception.TaskIncompleteDataException;
 import com.viscovich.to_do_list.exception.TaskNotFoundException;
@@ -7,6 +8,7 @@ import com.viscovich.to_do_list.model.Task;
 import com.viscovich.to_do_list.repository.TaskRepository;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -40,12 +42,24 @@ public class TaskService {
             } else {
                 task.setTitle(updatedTask.getTitle());
                 task.setDescription(updatedTask.getDescription());
-                task.setCompleted(updatedTask.isCompleted());
+                task.setDeadline(updatedTask.getDeadline());
                 return taskRepository.save(task);
             }
         } else {
             throw new TaskNotFoundException(id);
         }
+    }
+
+    public Task updateDeadline(Long id, LocalDate newDeadline) {
+        Task task = taskRepository.findById(id)
+                .orElseThrow(() -> new TaskNotFoundException(id));
+
+        if (newDeadline != null && newDeadline.isBefore(LocalDate.now())) {
+            throw new InvalidDeadlineException(newDeadline);
+        }
+
+        task.setDeadline(newDeadline);
+        return taskRepository.save(task);
     }
 
     public Task completeTask(Long id) {

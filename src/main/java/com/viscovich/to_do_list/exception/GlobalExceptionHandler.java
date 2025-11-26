@@ -34,6 +34,11 @@ public class GlobalExceptionHandler {
                 .body("Ya existe una tarea con ese título. Elige uno diferente.");
     }
 
+    @ExceptionHandler(InvalidDeadlineException.class)
+    public ResponseEntity<String> handleInvalidDeadlineException(InvalidDeadlineException ex) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
+    }
+
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<Map<String, String>> handleValidationErrors(MethodArgumentNotValidException ex) {
