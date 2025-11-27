@@ -44,13 +44,8 @@ public class Task {
     @JsonFormat(pattern = "dd/MM/yyyy")
     private LocalDate deadline;
 
-//    private enum Priority {
-//        LOW,
-//        MEDIUM,
-//        HIGH
-//    }
-//
-//    private Priority priority;
+    @Enumerated(EnumType.STRING)
+    private Priority priority = Priority.NONE;
 
     public Task(){
     }
@@ -98,6 +93,14 @@ public class Task {
 
     public LocalDate getDeadline() {
         return deadline;
+    }
+
+    public void setPriority(Priority priority) {
+        this.priority = priority;
+    }
+
+    public Priority getPriority(){
+        return priority;
     }
 
 

@@ -1,6 +1,7 @@
 package com.viscovich.to_do_list.controller;
 
 import com.viscovich.to_do_list.dto.DeadlineRequest;
+import com.viscovich.to_do_list.dto.UpdatePriorityDTO;
 import com.viscovich.to_do_list.exception.TaskNotFoundException;
 import com.viscovich.to_do_list.model.Task;
 import com.viscovich.to_do_list.service.TaskService;
@@ -54,6 +55,13 @@ public class TaskController {
         Task task = taskService.completeTask(id);
         return ResponseEntity.ok("La tarea fue marcada como completada");
     }
+
+    @PatchMapping("/{id}/priority")
+    public ResponseEntity<Task> updatePriority(@PathVariable Long id,@RequestBody UpdatePriorityDTO dto) {
+        Task updatedTask = taskService.updatePriority(id, dto.getPriority());
+        return ResponseEntity.ok(updatedTask);
+    }
+
 
     @PatchMapping("/{id}/deadline")
     public ResponseEntity<String> updateDeadline(@PathVariable Long id, @RequestBody DeadlineRequest request){

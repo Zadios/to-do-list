@@ -4,6 +4,7 @@ import com.viscovich.to_do_list.exception.InvalidDeadlineException;
 import com.viscovich.to_do_list.exception.TaskAlreadyCompletedException;
 import com.viscovich.to_do_list.exception.TaskIncompleteDataException;
 import com.viscovich.to_do_list.exception.TaskNotFoundException;
+import com.viscovich.to_do_list.model.Priority;
 import com.viscovich.to_do_list.model.Task;
 import com.viscovich.to_do_list.repository.TaskRepository;
 import org.springframework.stereotype.Service;
@@ -78,6 +79,13 @@ public class TaskService {
         return taskRepository.save(task);
     }
 
+    public Task updatePriority(Long id, Priority priority) {
+        Task task = getTaskById(id)
+                .orElseThrow(() -> new TaskNotFoundException(id));
+
+        task.setPriority(priority);
+        return taskRepository.save(task);
+    }
 
     public void deleteTask(Long id) {
         taskRepository.deleteById(id);
