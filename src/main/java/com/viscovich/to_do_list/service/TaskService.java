@@ -7,9 +7,11 @@ import com.viscovich.to_do_list.exception.TaskNotFoundException;
 import com.viscovich.to_do_list.model.Priority;
 import com.viscovich.to_do_list.model.Task;
 import com.viscovich.to_do_list.repository.TaskRepository;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -22,9 +24,25 @@ public class TaskService {
         this.taskRepository = taskRepository;
     }
 
-    public List<Task> getAllTasks(){
-        return taskRepository.findAll();
+    public List<Task> getAllTasks(String sortBy, String order) {
+
+        if (order == null || order.isBlank()) {
+            order = "asc";
+        }
+
+        List<String> fields = Arrays.asList("deadline", "priority", "createdAt", "title");
+
+        if (sortBy == null || sortBy.isBlank() || !fields.contains(sortBy)) {
+            return taskRepository.findAll();
+        }
+
+        Sort sort = order.equalsIgnoreCase("asc")
+                ? Sort.by(Sort.Direction.ASC, sortBy)
+                : Sort.by(Sort.Direction.DESC, sortBy);
+
+        return taskRepository.findAll(sort);
     }
+
 
     public Optional<Task> getTaskById(Long id) {
         return taskRepository.findById(id);
