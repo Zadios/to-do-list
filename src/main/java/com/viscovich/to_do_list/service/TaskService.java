@@ -24,10 +24,22 @@ public class TaskService {
         this.taskRepository = taskRepository;
     }
 
-    public List<Task> getAllTasks(String sortBy, String order) {
+    public List<Task> getAllTasks(String sortBy, String order, Priority priority, Boolean completed) {
 
         if (order == null || order.isBlank()) {
             order = "asc";
+        }
+
+        if (completed != null && priority != null ){
+            return taskRepository.findByCompletedAndPriority(completed, priority);
+        }
+
+        if (completed == null && priority != null ){
+            return taskRepository.findByPriority(priority);
+        }
+
+        if (completed != null && priority == null ){
+            return taskRepository.findByCompleted(completed);
         }
 
         List<String> fields = Arrays.asList("deadline", "priority", "createdAt", "title");

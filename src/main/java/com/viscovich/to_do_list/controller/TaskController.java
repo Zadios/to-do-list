@@ -3,6 +3,7 @@ package com.viscovich.to_do_list.controller;
 import com.viscovich.to_do_list.dto.DeadlineRequest;
 import com.viscovich.to_do_list.dto.UpdatePriorityDTO;
 import com.viscovich.to_do_list.exception.TaskNotFoundException;
+import com.viscovich.to_do_list.model.Priority;
 import com.viscovich.to_do_list.model.Task;
 import com.viscovich.to_do_list.service.TaskService;
 import jakarta.validation.Valid;
@@ -28,9 +29,11 @@ public class TaskController {
     @GetMapping
     public List<Task> getAllTasks(
             @RequestParam(required = false) String sortBy,
-            @RequestParam(required = false, defaultValue = "asc") String order) {
+            @RequestParam(required = false, defaultValue = "asc") String order,
+            @RequestParam(required = false) Priority priority,
+            @RequestParam(required = false) Boolean completed) {
 
-        return taskService.getAllTasks(sortBy, order);
+        return taskService.getAllTasks(sortBy, order, priority, completed);
     }
 
     @PostMapping
