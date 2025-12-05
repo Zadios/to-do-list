@@ -112,8 +112,11 @@ public class Task {
                 "id=" + id +
                 ", title='" + title + '\'' +
                 ", description='" + description + '\'' +
+                ", completed='" + completed + '\'' +
+                ", priority='" + priority + '\'' +
                 ", createdAt=" + createdAt +
                 ", updatedAt=" + updatedAt +
+                ", deadline='" + deadline + '\'' +
                 '}';
     }
 

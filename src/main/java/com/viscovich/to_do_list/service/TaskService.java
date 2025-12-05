@@ -7,7 +7,9 @@ import com.viscovich.to_do_list.exception.TaskNotFoundException;
 import com.viscovich.to_do_list.model.Priority;
 import com.viscovich.to_do_list.model.Task;
 import com.viscovich.to_do_list.repository.TaskRepository;
+import com.viscovich.to_do_list.specification.TaskSpecification;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -24,35 +26,30 @@ public class TaskService {
         this.taskRepository = taskRepository;
     }
 
-    public List<Task> getAllTasks(String sortBy, String order, Priority priority, Boolean completed) {
+    public List<Task> getAllTasks(String sortBy, String order, Priority priority, Boolean completed, String text, String deadlineToText) {
 
         if (order == null || order.isBlank()) {
             order = "asc";
         }
 
-        if (completed != null && priority != null ){
-            return taskRepository.findByCompletedAndPriority(completed, priority);
-        }
+        Specification<Task> spec = (root, query, cb) -> null;
 
-        if (completed == null && priority != null ){
-            return taskRepository.findByPriority(priority);
-        }
-
-        if (completed != null && priority == null ){
-            return taskRepository.findByCompleted(completed);
-        }
+        spec = spec.and(TaskSpecification.hasPriority(priority));
+        spec = spec.and(TaskSpecification.hasCompleted(completed));
+        spec = spec.and(TaskSpecification.titleContains(text));
+        spec = spec.and(TaskSpecification.deadlineBeforeOrEqual(deadlineToText));
 
         List<String> fields = Arrays.asList("deadline", "priority", "createdAt", "title");
 
         if (sortBy == null || sortBy.isBlank() || !fields.contains(sortBy)) {
-            return taskRepository.findAll();
+            return taskRepository.findAll(spec);
         }
 
         Sort sort = order.equalsIgnoreCase("asc")
                 ? Sort.by(Sort.Direction.ASC, sortBy)
                 : Sort.by(Sort.Direction.DESC, sortBy);
 
-        return taskRepository.findAll(sort);
+        return taskRepository.findAll(spec, sort);
     }
 
 
