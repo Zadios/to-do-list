@@ -73,8 +73,8 @@ public class TaskController {
 
 
     @PatchMapping("/{id}/deadline")
-    public ResponseEntity<String> updateDeadline(@PathVariable Long id, @RequestBody DeadlineRequest request){
-        Task updated = taskService.updateDeadline(id, request.deadline);
+    public ResponseEntity<String> updateDeadline(@PathVariable Long id, @Valid @RequestBody DeadlineRequest request){
+        Task updated = taskService.updateDeadline(id, request.getDeadline());
         return ResponseEntity.ok("La fecha límite para la tarea '" + updated.getTitle() + "' fue actualizada correctamente.");
     }
 

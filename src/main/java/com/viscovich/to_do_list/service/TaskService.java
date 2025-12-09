@@ -37,7 +37,7 @@ public class TaskService {
         spec = spec.and(TaskSpecification.hasPriority(priority));
         spec = spec.and(TaskSpecification.hasCompleted(completed));
         spec = spec.and(TaskSpecification.titleContains(text));
-        spec = spec.and(TaskSpecification.deadlineBeforeOrEqual(deadlineToText));
+        spec = spec.and(TaskSpecification.deadlineBetweenNowAnd(deadlineToText));
 
         List<String> fields = Arrays.asList("deadline", "priority", "createdAt", "title");
 
