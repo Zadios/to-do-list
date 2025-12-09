@@ -33,9 +33,10 @@ public class TaskController {
             @RequestParam(required = false) Priority priority,
             @RequestParam(required = false) Boolean completed,
             @RequestParam(required = false) String text,
-            @RequestParam(required = false) String deadlineToText) {
+            @RequestParam(required = false) String deadlineToText,
+            @RequestParam(required = false) Boolean expired) {
 
-        return taskService.getAllTasks(sortBy, order, priority, completed, text, deadlineToText);
+        return taskService.getAllTasks(sortBy, order, priority, completed, text, deadlineToText, expired);
     }
 
     @PostMapping

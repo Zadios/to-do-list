@@ -45,4 +45,9 @@ public class TaskSpecification {
                 -> builder.between(root.get("deadline"), LocalDate.now(), endDate);
     }
 
+    public static Specification<Task> deadlineBefore(){
+        return (root, query, builder)
+            -> builder.lessThan(root.get("deadline"), LocalDate.now());
+    }
+
 }

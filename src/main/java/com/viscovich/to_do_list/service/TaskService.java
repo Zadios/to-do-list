@@ -26,7 +26,7 @@ public class TaskService {
         this.taskRepository = taskRepository;
     }
 
-    public List<Task> getAllTasks(String sortBy, String order, Priority priority, Boolean completed, String text, String deadlineToText) {
+    public List<Task> getAllTasks(String sortBy, String order, Priority priority, Boolean completed, String text, String deadlineToText, Boolean expired) {
 
         if (order == null || order.isBlank()) {
             order = "asc";
@@ -34,10 +34,16 @@ public class TaskService {
 
         Specification<Task> spec = (root, query, cb) -> null;
 
+        Specification<Task> futureSpec = TaskSpecification.deadlineBetweenNowAnd(deadlineToText);
+
         spec = spec.and(TaskSpecification.hasPriority(priority));
         spec = spec.and(TaskSpecification.hasCompleted(completed));
         spec = spec.and(TaskSpecification.titleContains(text));
-        spec = spec.and(TaskSpecification.deadlineBetweenNowAnd(deadlineToText));
+        spec = spec.and(futureSpec);
+
+        if (expired != null && expired && futureSpec == null) {
+            spec = spec.and(TaskSpecification.deadlineBefore());
+        }
 
         List<String> fields = Arrays.asList("deadline", "priority", "createdAt", "title");
 
