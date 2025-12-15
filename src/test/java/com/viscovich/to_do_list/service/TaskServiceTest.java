@@ -9,11 +9,9 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(MockitoExtension.class)
 public class TaskServiceTest {
@@ -36,5 +34,20 @@ public class TaskServiceTest {
         assertThrows(TaskAlreadyCompletedException.class, () -> {
             taskService.completeTask(id);
         });
+    }
+
+    @Test
+    public void whenCompleteTask_givenTaskIsNotCompleted_thenTaskShouldBeSavedAsCompleted() {
+        Long id = 2L;
+        Task task = new Task("Test Tarea No Completada", "Desc");
+        task.setId(id);
+
+        Mockito.when(taskRepository.findById(id)).thenReturn(Optional.of(task));
+
+        taskService.completeTask(id);
+
+        Mockito.verify(taskRepository).save(task);
+
+        assertTrue(task.isCompleted());
     }
 }
