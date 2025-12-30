@@ -9,6 +9,7 @@ A simple and efficient To-Do List application built with Spring Boot 3, Java 21,
 * MySQL 8.0
 * Docker & Docker Compose
 * Maven
+* Swagger
 
 ## Getting Started
 
@@ -58,3 +59,11 @@ This project is Docker-ready. You can deploy the entire stack (App + Database) w
 - Dockerfile: Instructions for the app image.
 - docker-compose.yml: Orchestration for App and MySQL.
 
+## Documentation 📖
+Once the application is running, you can access the interactive API documentation (Swagger UI) at:
+http://localhost:8080/swagger-ui/index.html
+
+From this interface, you can:
+* Visualize all available endpoints.
+* Test GET, POST, PUT, and DELETE requests directly from the browser.
+* View the data models and schemas.
