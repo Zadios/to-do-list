@@ -26,7 +26,9 @@ services:
       SPRING_DATASOURCE_PASSWORD: user
       SPRING_PROFILES_ACTIVE: docker
     depends_on:
-      - mysql-db
-    restart: always
-volumes:
-  db_data:
+      mysql-db:
+        condition: service_healthy
+      restart: always
+
+    volumes:
+      db_data:
